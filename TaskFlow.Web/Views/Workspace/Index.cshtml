@@ -1,0 +1,49 @@
+﻿@model List<TaskFlow.Application.DTOs.WorkspaceDto>
+@{
+    ViewData["Title"] = "My Workspaces";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Workspaces</h2>
+</div>
+
+<form asp-action="Create" method="post" class="row g-2 mb-4">
+    <div class="col-auto">
+        <input type="text" name="name" class="form-control" placeholder="New workspace name" required />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No workspaces yet. Create one above to get started.</div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workspace in Model)
+            {
+                <tr>
+                    <td><a asp-controller="Project" asp-action="Index" asp-route-workspaceId="@workspace.Id">@workspace.Name</a></td>
+                    <td>@workspace.CreatedAt.ToString("dd MMM yyyy")</td>
+                    <td class="text-end">
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@workspace.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

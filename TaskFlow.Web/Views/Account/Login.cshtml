@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form id="loginForm">
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" id="email" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <input type="password" id="password" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <div id="errorMessage" class="text-danger mt-2"></div>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/Account/LoginSubmit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                window.location.href = '/Workspace';
+            } else {
+                document.getElementById('errorMessage').innerText = 'Invalid login';
+            }
+        });
+    </script>
+}

@@ -1,0 +1,44 @@
+﻿@model List<TaskFlow.Application.DTOs.TaskItemDto>
+@{
+    ViewData["Title"] = "Tasks";
+    var projectId = ViewBag.ProjectId;
+}
+
+<h2>Tasks</h2>
+
+<form asp-action="Create" method="post" class="row g-2 mb-4">
+    <input type="hidden" name="projectId" value="@projectId" />
+    <div class="col-auto">
+        <input type="text" name="title" class="form-control" placeholder="New task title" required />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No tasks yet.</div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead><tr><th>Title</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Title</td>
+                    <td>@task.Status</td>
+                    <td class="text-end">
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@task.Id" />
+                            <input type="hidden" name="projectId" value="@projectId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
